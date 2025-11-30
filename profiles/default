@@ -1,0 +1,13 @@
+[settings]
+arch=x86_64
+build_type=Release
+compiler=clang
+compiler.cppstd=26
+compiler.libcxx=libc++
+compiler.version=22
+os=Linux
+[conf]
+user.mccakit:build=static
+user.mccakit:cmake=/home/mccakit/dev/toolchains/static/native.cmake
+user.mccakit:autotools_native=/home/mccakit/dev/toolchains/static/native-autotools.sh
+user.mccakit:autotools_cross=/home/mccakit/dev/toolchains/static/native-autotools.sh
