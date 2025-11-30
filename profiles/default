@@ -11,3 +11,5 @@ user.mccakit:build=static
 user.mccakit:cmake=/home/mccakit/dev/toolchains/static/native.cmake
 user.mccakit:autotools_native=/home/mccakit/dev/toolchains/static/native-autotools.sh
 user.mccakit:autotools_cross=/home/mccakit/dev/toolchains/static/native-autotools.sh
+user.mccakit:meson_native=/home/mccakit/dev/toolchains/static/native-meson.ini
+user.mccakit:meson_cross=/home/mccakit/dev/toolchains/static/native-meson.ini

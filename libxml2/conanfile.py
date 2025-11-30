@@ -5,11 +5,10 @@ import subprocess
 
 class libxml2_conan(ConanFile):
     name = "libxml2"
-    version = "upstream"
-    requires = "icu/upstream"
+    requires = "icu/[>75]"
 
     def source(self):
-        subprocess.run('bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:GNOME/libxml2.git"', shell=True, check=True)
+        subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:GNOME/libxml2.git -b {self.version}"', shell=True, check=True)
 
     def generate(self):
         # Generate pkg-config files for ICU

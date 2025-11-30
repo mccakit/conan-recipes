@@ -1,13 +1,12 @@
 from conan import ConanFile
 import os
 import subprocess
+from packaging.version import Version, InvalidVersion
 
 class ICUConan(ConanFile):
     name = "icu"
-    version = "upstream"
     def source(self):
-        subprocess.run('bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:unicode-org/icu.git"', shell=True, check=True)
-
+        subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:unicode-org/icu.git -b {self.version}"', shell=True, check=True)
     def build(self):
         cmake_toolchain = self.conf.get("user.mccakit:cmake", None)
         autotools_native = self.conf.get("user.mccakit:autotools_native", None)

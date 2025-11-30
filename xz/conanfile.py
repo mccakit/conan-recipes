@@ -4,9 +4,8 @@ import subprocess
 
 class XZConan(ConanFile):
     name = "xz"
-    version = "upstream"
     def source(self):
-        subprocess.run('bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:tukaani-project/xz.git"', shell=True, check=True)
+        subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:tukaani-project/xz.git -b {self.version}"', shell=True, check=True)
 
     def build(self):
         cmake_toolchain = self.conf.get("user.mccakit:cmake", None)
