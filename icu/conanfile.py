@@ -1,7 +1,6 @@
 from conan import ConanFile
 import os
 import subprocess
-from packaging.version import Version, InvalidVersion
 
 class ICUConan(ConanFile):
     name = "icu"

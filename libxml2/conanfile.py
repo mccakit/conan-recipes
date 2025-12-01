@@ -27,4 +27,6 @@ class libxml2_conan(ConanFile):
         subprocess.run(f'bash -c "meson install -C builddir"', shell=True, check=True)
 
     def package_info(self):
+        self.cpp_info.set_property("pkg_config_name", "libxml-2.0")
         self.cpp_info.libs = ["xml2"]
+        self.cpp_info.includedirs = ["include/libxml2"]
