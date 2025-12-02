@@ -1,13 +1,14 @@
 from conan import ConanFile
 import os
 import subprocess
-from packaging.version import Version, InvalidVersion
 
-class pcre2(ConanFile):
-    name = "pcre2"
+class jbigkit(ConanFile):
+    name = "jbigkit"
+    version = "master"
     def source(self):
-        subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:PCRE2Project/pcre2.git -b {self.version}"', shell=True, check=True)
+        subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:nu774/jbigkit.git -b {self.version}"', shell=True, check=True)
     def build(self):
+        cmake_toolchain = self.conf.get("user.mccakit:cmake", None)
         autotools_native = self.conf.get("user.mccakit:autotools_native", None)
         autotools_cross = self.conf.get("user.mccakit:autotools_cross", None)
         autotools_target = self.conf.get("user.mccakit:autotools_target", None)
@@ -22,7 +23,7 @@ class pcre2(ConanFile):
             type = shared
         else:
             raise ValueError("Invalid build type")
-        os.chdir("pcre2")
+        os.chdir("jbigkit")
         pkgconf_path = ":".join(
             os.path.join(dep.package_folder, "lib", "pkgconfig")
             for dep in self.dependencies.values()
@@ -32,4 +33,7 @@ class pcre2(ConanFile):
             dep.package_folder for dep in self.dependencies.values()
         )
         subprocess.run(f'bash -c "autoreconf -i"', shell=True, check=True)
-        subprocess.run(f'bash -c "source {autotools_native} && ./configure --prefix {self.package_folder} --host={autotools_target} {type} && make -j{cpu_count} && make install"', shell=True, check=True)
+        subprocess.run(f'bash -c "source {autotools_cross} && ./configure --host={autotools_target} --prefix {self.package_folder} {type} && make -j{cpu_count} && make install"', shell=True, check=True)
+
+    def package_info(self):
+        self.cpp_info.libs = ["jbig"]
