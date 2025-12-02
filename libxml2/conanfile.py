@@ -1,10 +1,10 @@
 from conan import ConanFile
-from conan.tools.gnu import PkgConfigDeps
 import os
 import subprocess
 
-class libxml2_conan(ConanFile):
+class libxml2(ConanFile):
     name = "libxml2"
+    version = "master"
     requires = "icu/[>78]"
 
     def source(self):

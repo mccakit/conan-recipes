@@ -2,22 +2,23 @@ from conan import ConanFile
 import os
 import subprocess
 
-class freetype(ConanFile):
-    name = "freetype"
-    version = "master"
-    requires = (
-        "brotli/[>1.2.0]",
-        "libpng/[>1.7]",
-        "zlib/[>1.3.1]",
-    )
+class wayland_protocols(ConanFile):
+    name = "wayland-protocols"
+    version = "main"
+    requires = ("wayland/[>=1.24]")
 
     def source(self):
-        subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:freetype/freetype.git -b {self.version}"', shell=True, check=True)
+        subprocess.run(
+            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 https://gitlab.freedesktop.org/wayland/wayland-protocols.git -b {self.version}"',
+            shell=True,
+            check=True,
+        )
 
     def build(self):
         meson_native = self.conf.get("user.mccakit:meson_native", None)
         meson_cross = self.conf.get("user.mccakit:meson_cross", None)
-        os.chdir("freetype")
+
+        os.chdir("wayland-protocols")
         pkgconf_path = ":".join(
             os.path.join(dep.package_folder, "lib", "pkgconfig")
             for dep in self.dependencies.values()
@@ -26,9 +27,14 @@ class freetype(ConanFile):
         cmake_prefix_path = ";".join(
             dep.package_folder for dep in self.dependencies.values()
         )
-        subprocess.run(f'bash -c "meson setup builddir --native-file={meson_native} --cross-file={meson_cross} --prefix={self.package_folder} -Dharfbuzz=disabled -Dbzip2=disabled -Dzlib=system"', shell=True, check=True)
+        subprocess.run(
+            f'bash -c "meson setup builddir --native-file={meson_native} --cross-file={meson_cross} --prefix={self.package_folder}"',
+            shell=True,
+            check=True,
+        )
         subprocess.run(f'bash -c "meson compile -C builddir"', shell=True, check=True)
         subprocess.run(f'bash -c "meson install -C builddir"', shell=True, check=True)
 
+
     def package_info(self):
-        self.cpp_info.libs = ["freetype"]
+        self.cpp_info.libs = ["wayland"]
