@@ -3,28 +3,27 @@ import os
 import subprocess
 
 
-class sdl(ConanFile):
-    name = "sdl"
+class sdl_image(ConanFile):
+    name = "sdl-image"
     version = "main"
     requires = (
-        "libiconv/[>=1.16]",
-        "alsa-lib/[>=1.0]",
-        "wayland/[>=1.24]",
-        "wayland-protocols/[>=1.46]",
-        "vulkan-headers/[>=1.4.3]",
-        "libxkbcommon/[>=1.13]"
+        "sdl/[>=3.2.28]",
+        "libpng/[>=1.7]",
+        "libwebp/[>=1.6]",
+        "libjpeg-turbo/[>=3.1.2]",
+        "libiconv/[>1.18]",
     )
 
     def source(self):
         subprocess.run(
-            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:mccakit/SDL.git -b {self.version}"',
+            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:libsdl-org/SDL_image.git -b {self.version}"',
             shell=True,
             check=True,
         )
 
     def build(self):
         cmake_toolchain = self.conf.get("user.mccakit:cmake", None)
-        os.chdir("SDL")
+        os.chdir("SDL_image")
         pkgconf_paths = []
         for dep in self.dependencies.values():
             for subdir in ("lib", "share"):
@@ -35,7 +34,6 @@ class sdl(ConanFile):
         pkgconf_path = ":".join(pkgconf_paths)
         pkgconf_path = ":".join(["/usr/lib/x86_64-linux-gnu/pkgconfig"] + pkgconf_paths)
         os.environ["PKG_CONFIG_LIBDIR"] = pkgconf_path
-        print("LOLLLL" + pkgconf_path)
         cmake_prefix_path = ";".join(
             dep.package_folder for dep in self.dependencies.values()
         )
@@ -44,15 +42,9 @@ class sdl(ConanFile):
         ])
         os.environ["CPATH"] = os.pathsep.join([
             os.path.join(self.dependencies['libiconv'].package_folder, 'include'),
-            os.path.join(self.dependencies['vulkan-headers'].package_folder, 'include')
         ])
-        os.environ["PATH"] = (
-            os.path.join(self.dependencies["wayland"].package_folder, "bin")
-            + os.pathsep +
-            os.environ["PATH"]
-        )
         subprocess.run(
-            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DSDL_LIBICONV=ON -DSDL_OPENGL=OFF -DSDL_OPENGLES=OFF -DSDL_EXAMPLES=OFF -DSDL_LIBUDEV=OFF -DSDL_WAYLAND=ON"',
+            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DSDLIMAGE_SAMPLES=OFF -DSDLIMAGE_AVIF=OFF -DSDLIMAGE_BMP=OFF -DSDLIMAGE_JPG_SHARED=OFF -DSDLIMAGE_PNG_SHARED=OFF -DSDLIMAGE_WEBP_SHARED=OFF"',
             shell=True,
             check=True,
         )
@@ -62,4 +54,4 @@ class sdl(ConanFile):
         subprocess.run(f'bash -c "cmake --install build"', shell=True, check=True)
 
     def package_info(self):
-        self.cpp_info.libs = ["SDL3"]
+        self.cpp_info.libs = ["SDL3_image"]
