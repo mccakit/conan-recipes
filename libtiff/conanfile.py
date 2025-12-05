@@ -8,10 +8,9 @@ class libtiff(ConanFile):
     version = "master"
     requires = (
         "zstd/[>1.5.7]",
-        "zlib/[>1.3.1]",
+        "zlib-ng/[>2.0.0]",
         "libjpeg-turbo/[>3.1.2]",
         "xz/[>5.8]",
-        "libdeflate/[>1.25]",
         "lerc/[>=4.0.0]",
         "libwebp/[>1.6]",
         "jbigkit/[>=2.1]",
@@ -19,7 +18,7 @@ class libtiff(ConanFile):
 
     def source(self):
         subprocess.run(
-            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 https://gitlab.com/libtiff/libtiff.git -b {self.version}"',
+            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:libsdl-org/libtiff.git -b {self.version}"',
             shell=True,
             check=True,
         )

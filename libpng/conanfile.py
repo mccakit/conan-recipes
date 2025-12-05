@@ -6,7 +6,7 @@ import subprocess
 class libpng(ConanFile):
     name = "libpng"
     version = "develop"
-    requires = ("zlib/[>1.3.1]",)
+    requires = ("zlib-ng/[>2.0.0]",)
     def source(self):
         subprocess.run(
             f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:pnggroup/libpng.git -b {self.version}"',

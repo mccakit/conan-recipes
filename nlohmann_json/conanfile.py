@@ -27,7 +27,7 @@ class nlohmann_json(ConanFile):
             dep.package_folder for dep in self.dependencies.values()
         )
         subprocess.run(
-            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DNLOHMANN_JSON_BUILD_MODULES=ON"',
+            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DJSON_BuildTests=OFF"',
             shell=True,
             check=True,
         )
@@ -36,5 +36,5 @@ class nlohmann_json(ConanFile):
         )
         subprocess.run(f'bash -c "cmake --install build"', shell=True, check=True)
 
-    def package_info(self):
-        self.cpp_info.libs = ["json"]
+def package_info(self):
+    pass

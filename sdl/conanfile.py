@@ -35,7 +35,6 @@ class sdl(ConanFile):
         pkgconf_path = ":".join(pkgconf_paths)
         pkgconf_path = ":".join(["/usr/lib/x86_64-linux-gnu/pkgconfig"] + pkgconf_paths)
         os.environ["PKG_CONFIG_LIBDIR"] = pkgconf_path
-        print("LOLLLL" + pkgconf_path)
         cmake_prefix_path = ";".join(
             dep.package_folder for dep in self.dependencies.values()
         )
@@ -52,7 +51,7 @@ class sdl(ConanFile):
             os.environ["PATH"]
         )
         subprocess.run(
-            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DSDL_LIBICONV=ON -DSDL_OPENGL=OFF -DSDL_OPENGLES=OFF -DSDL_EXAMPLES=OFF -DSDL_LIBUDEV=OFF -DSDL_WAYLAND=ON"',
+            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DSDL_LIBICONV=ON -DSDL_EXAMPLES=OFF -DSDL_LIBUDEV=OFF"',
             shell=True,
             check=True,
         )

@@ -11,7 +11,7 @@ class curl(ConanFile):
         "boringssl/[>0.20]",
         "libidn2/[>2.8.3]",
         "zstd/[>1.5.7]",
-        "zlib/[>1.3.1]",
+        "zlib-ng/[>2.0.0]",
         "brotli/[>1.2.0]",
         "libpsl/[>0.21.5]",
         "libssh2/[>1.11.1]",

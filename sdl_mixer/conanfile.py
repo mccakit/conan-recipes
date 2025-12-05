@@ -4,13 +4,15 @@ import subprocess
 
 
 class sdl_mixer(ConanFile):
-    name = "sdl-mixer"
+    name = "sdl_mixer"
     version = "main"
     requires = (
         "sdl/[>=3.2.28]",
         "opus/[>=1.5.2]",
         "flac/[>=1.5]",
         "mpg123/[>=1.3]",
+        "vorbis/[>=1.3.7]",
+        "ogg/[>=1.3.6]",
     )
 
     def source(self):
@@ -37,7 +39,7 @@ class sdl_mixer(ConanFile):
             dep.package_folder for dep in self.dependencies.values()
         )
         subprocess.run(
-            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DSDLMIXER_GME=OFF -DSDLMIXER_MOD_XMP=OFF -DSDLMIXER_FLAC_LIBFLAC_SHARED=OFF -DSDLMIXER_MP3_MPG123_SHARED=OFF -DSDLMIXER_OPUS_SHARED=OFF"',
+            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DSDLMIXER_GME=OFF -DSDLMIXER_MOD_XMP=OFF -DSDLMIXER_FLAC_LIBFLAC_SHARED=OFF -DSDLMIXER_MP3_MPG123_SHARED=OFF -DSDLMIXER_OPUS_SHARED=OFF -DSDLMIXER_OGG_SHARED=OFF -DSDLMIXER_VORBIS_SHARED=OFF -DSDLMIXER_VORBIS_VORBISFILE_SHARED=OFF"',
             shell=True,
             check=True,
         )

@@ -4,7 +4,7 @@ import subprocess
 
 
 class sdl_image(ConanFile):
-    name = "sdl-image"
+    name = "sdl_image"
     version = "main"
     requires = (
         "sdl/[>=3.2.28]",
@@ -12,6 +12,7 @@ class sdl_image(ConanFile):
         "libwebp/[>=1.6]",
         "libjpeg-turbo/[>=3.1.2]",
         "libiconv/[>1.18]",
+        "zlib-ng/[>2.0.0]",
     )
 
     def source(self):
@@ -44,7 +45,7 @@ class sdl_image(ConanFile):
             os.path.join(self.dependencies['libiconv'].package_folder, 'include'),
         ])
         subprocess.run(
-            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DSDLIMAGE_SAMPLES=OFF -DSDLIMAGE_AVIF=OFF -DSDLIMAGE_BMP=OFF -DSDLIMAGE_JPG_SHARED=OFF -DSDLIMAGE_PNG_SHARED=OFF -DSDLIMAGE_WEBP_SHARED=OFF"',
+            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DSDLIMAGE_SAMPLES=OFF -DSDLIMAGE_AVIF=OFF -DSDLIMAGE_BMP=OFF -DSDLIMAGE_JPG_SHARED=OFF -DSDLIMAGE_PNG_SHARED=OFF -DSDLIMAGE_WEBP_SHARED=OFF -DSDLIMAGE_TIF=OFF -DSDLIMAGE_ZLIB_SHARED=OFF"',
             shell=True,
             check=True,
         )

@@ -37,4 +37,4 @@ class wayland_protocols(ConanFile):
 
 
     def package_info(self):
-        self.cpp_info.libs = ["wayland"]
+        pass
