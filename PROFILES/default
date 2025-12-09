@@ -6,10 +6,15 @@ compiler.cppstd=26
 compiler.libcxx=libc++
 compiler.version=22
 os=Linux
+
 [conf]
 user.mccakit:build=static
 user.mccakit:cmake=/home/mccakit/dev/toolchains/static/native.cmake
 user.mccakit:autotools_native=/home/mccakit/dev/toolchains/static/native-autotools.sh
 user.mccakit:autotools_cross=/home/mccakit/dev/toolchains/static/native-autotools.sh
+user.mccakit:autotools_target=x86_64-pc-linux-gnu
+user.mccakit:ffmpeg_target=linux
+user.mccakit:ffmpeg_arch=x86_64
 user.mccakit:meson_native=/home/mccakit/dev/toolchains/static/native-meson.ini
 user.mccakit:meson_cross=/home/mccakit/dev/toolchains/static/native-meson.ini
+user.mccakit:utilities=/home/mccakit/dev/utilities
