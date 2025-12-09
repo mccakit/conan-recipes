@@ -5,6 +5,7 @@ import subprocess
 class wayland_protocols(ConanFile):
     name = "wayland-protocols"
     version = "main"
+    settings = "os", "arch", "compiler", "build_type"
     requires = ("wayland/[>=1.24]")
 
     def source(self):

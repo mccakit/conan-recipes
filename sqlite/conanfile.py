@@ -5,6 +5,7 @@ import subprocess
 class sqlite(ConanFile):
     name = "sqlite"
     version = "master"
+    settings = "os", "arch", "compiler", "build_type"
     def source(self):
         subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:sqlite/sqlite.git -b {self.version}"', shell=True, check=True)
     def build(self):

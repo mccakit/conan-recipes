@@ -3,9 +3,10 @@ import os
 import subprocess
 
 
-class ICUConan(ConanFile):
+class icu(ConanFile):
     name = "icu"
     version = "main"
+    settings = "os", "arch", "compiler", "build_type"
     requires = ()
 
     def source(self):

@@ -6,6 +6,7 @@ import subprocess
 class check(ConanFile):
     name = "check"
     version = "master"
+    settings = "os", "arch", "compiler", "build_type"
     requires = ()
 
     def source(self):

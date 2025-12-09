@@ -5,6 +5,7 @@ import subprocess
 class speexdsp(ConanFile):
     name = "speexdsp"
     version = "master"
+    settings = "os", "arch", "compiler", "build_type"
     requires = ()
     def source(self):
         subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:xiph/speexdsp.git -b {self.version}"', shell=True, check=True)

@@ -6,6 +6,7 @@ import subprocess
 class opus(ConanFile):
     name = "opus"
     version = "main"
+    settings = "os", "arch", "compiler", "build_type"
     requires = ()
 
     def source(self):

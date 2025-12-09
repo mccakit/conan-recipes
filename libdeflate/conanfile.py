@@ -5,6 +5,7 @@ import subprocess
 class libdeflate(ConanFile):
     name = "libdeflate"
     version = "master"
+    settings = "os", "arch", "compiler", "build_type"
     def source(self):
         subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:ebiggers/libdeflate.git -b {self.version}"', shell=True, check=True)
 

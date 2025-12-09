@@ -6,6 +6,7 @@ import subprocess
 class xz(ConanFile):
     name = "xz"
     version = "master"
+    settings = "os", "arch", "compiler", "build_type"
 
     def source(self):
         subprocess.run(

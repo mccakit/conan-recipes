@@ -6,10 +6,13 @@ import subprocess
 class flac(ConanFile):
     name = "flac"
     version = "master"
-    requires = (
-        "ogg/[>=1.3.6]",
-        "libiconv/[>1.18]",
-    )
+    settings = "os", "arch", "compiler", "build_type"
+    def requirements(self):
+        if self.settings.os == "Linux":
+            self.requires("ogg/[>=1.3.6]")
+            self.requires("libiconv/[>1.18]")
+        elif self.settings.os == "Android":
+            pass
 
     def source(self):
         subprocess.run(

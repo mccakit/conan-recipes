@@ -6,6 +6,7 @@ import subprocess
 class nlohmann_json(ConanFile):
     name = "nlohmann_json"
     version = "develop"
+    settings = "os", "arch", "compiler", "build_type"
     requires = ()
 
     def source(self):

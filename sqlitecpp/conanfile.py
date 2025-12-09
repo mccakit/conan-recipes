@@ -6,6 +6,7 @@ import subprocess
 class sqlitecpp(ConanFile):
     name = "sqlitecpp"
     version = "master"
+    settings = "os", "arch", "compiler", "build_type"
     requires = (
         "sqlite3/[>=3.51]",
     )

@@ -5,6 +5,8 @@ import subprocess
 class zlib_ng(ConanFile):
     name = "zlib-ng"
     version= "develop"
+    settings = "os", "arch", "compiler", "build_type"
+
     def source(self):
         subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:zlib-ng/zlib-ng.git -b {self.version}"', shell=True, check=True)
 

@@ -2,22 +2,24 @@ from conan import ConanFile
 import os
 import subprocess
 
-
 class sdl(ConanFile):
     name = "sdl"
     version = "main"
-    requires = (
-        "libiconv/[>=1.16]",
-        "alsa-lib/[>=1.0]",
-        "wayland/[>=1.24]",
-        "wayland-protocols/[>=1.46]",
-        "vulkan-headers/[>=1.4.3]",
-        "libxkbcommon/[>=1.13]"
-    )
+    settings = "os", "arch", "compiler", "build_type"
+    def requirements(self):
+        if self.settings.os == "Linux":
+            self.requires("libiconv/[>=1.16]")
+            self.requires("alsa-lib/[>=1.0]")
+            self.requires("wayland/[>=1.24]")
+            self.requires("wayland-protocols/[>=1.46]")
+            self.requires("vulkan-headers/[>=1.4.3]")
+            self.requires("libxkbcommon/[>=1.13]")
+        elif self.settings.os == "Android":
+            self.requires("vulkan-headers/[>=1.4.3]")
 
     def source(self):
         subprocess.run(
-            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:mccakit/SDL.git -b {self.version}"',
+            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:libsdl-org/SDL.git -b {self.version}"',
             shell=True,
             check=True,
         )
@@ -33,23 +35,27 @@ class sdl(ConanFile):
                     pkgconf_paths.append(path)
 
         pkgconf_path = ":".join(pkgconf_paths)
-        pkgconf_path = ":".join(["/usr/lib/x86_64-linux-gnu/pkgconfig"] + pkgconf_paths)
+        if self.settings.os == "Linux":
+            pkgconf_path = ":".join(["/usr/lib/x86_64-linux-gnu/pkgconfig"] + pkgconf_paths)
         os.environ["PKG_CONFIG_LIBDIR"] = pkgconf_path
         cmake_prefix_path = ";".join(
             dep.package_folder for dep in self.dependencies.values()
         )
-        os.environ["LIBRARY_PATH"] = ":".join([
-            os.path.join(self.dependencies['libiconv'].package_folder, 'lib')
-        ])
+        if self.settings.os == "Linux":
+            os.environ["LIBRARY_PATH"] = ":".join([
+                os.path.join(self.dependencies['libiconv'].package_folder, 'lib')
+            ])
+            os.environ["CPATH"] = os.pathsep.join([
+                os.path.join(self.dependencies['libiconv'].package_folder, 'include'),
+            ])
+            os.environ["PATH"] = (
+                os.path.join(self.dependencies["wayland"].package_folder, "bin")
+                + os.pathsep +
+                os.environ["PATH"]
+            )
         os.environ["CPATH"] = os.pathsep.join([
-            os.path.join(self.dependencies['libiconv'].package_folder, 'include'),
             os.path.join(self.dependencies['vulkan-headers'].package_folder, 'include')
         ])
-        os.environ["PATH"] = (
-            os.path.join(self.dependencies["wayland"].package_folder, "bin")
-            + os.pathsep +
-            os.environ["PATH"]
-        )
         subprocess.run(
             f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DSDL_LIBICONV=ON -DSDL_EXAMPLES=OFF -DSDL_LIBUDEV=OFF"',
             shell=True,

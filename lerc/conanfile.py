@@ -6,6 +6,7 @@ import subprocess
 class lerc(ConanFile):
     name = "lerc"
     version = "master"
+    settings = "os", "arch", "compiler", "build_type"
     requires = ()
 
     def source(self):

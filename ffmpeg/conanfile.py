@@ -5,6 +5,7 @@ import subprocess
 class ffmpeg(ConanFile):
     name = "ffmpeg"
     version = "master"
+    settings = "os", "arch", "compiler", "build_type"
     def source(self):
         subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:FFmpeg/FFmpeg.git -b {self.version}"', shell=True, check=True)
     def build(self):

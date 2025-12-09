@@ -5,6 +5,7 @@ import subprocess
 class freetype(ConanFile):
     name = "freetype"
     version = "master"
+    settings = "os", "arch", "compiler", "build_type"
     requires = (
         "brotli/[>1.2.0]",
         "libpng/[>1.7]",

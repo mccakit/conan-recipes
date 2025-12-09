@@ -6,10 +6,11 @@ import subprocess
 class libtiff(ConanFile):
     name = "libtiff"
     version = "master"
+    settings = "os", "arch", "compiler", "build_type"
     requires = (
         "zstd/[>1.5.7]",
         "zlib-ng/[>2.0.0]",
-        "libjpeg-turbo/[>3.1.2]",
+        "libjpeg_turbo/[>3.1.2]",
         "xz/[>5.8]",
         "lerc/[>=4.0.0]",
         "libwebp/[>1.6]",

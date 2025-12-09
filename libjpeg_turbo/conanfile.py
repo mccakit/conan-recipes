@@ -3,8 +3,9 @@ import os
 import subprocess
 
 class libjpeg_turbo(ConanFile):
-    name = "libjpeg-turbo"
+    name = "libjpeg_turbo"
     version = "main"
+    settings = "os", "arch", "compiler", "build_type"
     requires = ()
     def source(self):
         subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:libjpeg-turbo/libjpeg-turbo.git -b {self.version}"', shell=True, check=True)

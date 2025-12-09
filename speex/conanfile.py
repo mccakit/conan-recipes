@@ -5,6 +5,7 @@ import subprocess
 class speex(ConanFile):
     name = "speex"
     version = "master"
+    settings = "os", "arch", "compiler", "build_type"
     requires = (
         "ogg/[>=1.3.6]",
         "speexdsp/[>=1.2]",

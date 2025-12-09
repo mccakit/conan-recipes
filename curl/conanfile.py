@@ -7,15 +7,22 @@ class curl(ConanFile):
     name = "curl"
     version = "master"
     settings = "os", "arch", "compiler", "build_type"
-    requires = (
-        "boringssl/[>0.20]",
-        "libidn2/[>2.8.3]",
-        "zstd/[>1.5.7]",
-        "zlib-ng/[>2.0.0]",
-        "brotli/[>1.2.0]",
-        "libpsl/[>0.21.5]",
-        "libssh2/[>1.11.1]",
-    )
+    def requirements(self):
+        if self.settings.os == "Linux":
+            self.requires("boringssl/[>0.20]")
+            self.requires("libidn2/[>2.8.3]")
+            self.requires("zstd/[>1.5.7]")
+            self.requires("zlib-ng/[>2.0.0]")
+            self.requires("brotli/[>1.2.0]")
+            self.requires("libpsl/[>0.21.5]")
+            self.requires("libssh2/[>1.11.1]")
+        elif self.settings.os == "Android":
+            self.requires("boringssl/[>0.20]")
+            self.requires("zstd/[>1.5.7]")
+            self.requires("zlib-ng/[>2.0.0]")
+            self.requires("brotli/[>1.2.0]")
+            self.requires("libssh2/[>1.11.1]")
+
 
     def source(self):
         subprocess.run(
@@ -35,11 +42,18 @@ class curl(ConanFile):
         cmake_prefix_path = ";".join(
             dep.package_folder for dep in self.dependencies.values()
         )
-        subprocess.run(
-            f'bash -c "cmake -B builddir -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DBUILD_CURL_EXE=OFF"',
-            shell=True,
-            check=True,
-        )
+        if self.settings.os == "Linux":
+            subprocess.run(
+                f'bash -c "cmake -B builddir -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DBUILD_CURL_EXE=OFF -DUSE_LIBIDN2=OFF"',
+                shell=True,
+                check=True,
+            )
+        elif self.settings.os == "Android":
+            subprocess.run(
+                f'bash -c "cmake -B builddir -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DBUILD_CURL_EXE=OFF -DCURL_USE_LIBPSL=OFF"',
+                shell=True,
+                check=True,
+            )
         subprocess.run(
             f'bash -c "cmake --build builddir --parallel"', shell=True, check=True
         )

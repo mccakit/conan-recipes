@@ -6,6 +6,7 @@ import subprocess
 class libpsl(ConanFile):
     name = "libpsl"
     version = "master"
+    settings = "os", "arch", "compiler", "build_type"
     requires = (
         "libunistring/[>1.4.1]",
         "libiconv/[>1.18]",

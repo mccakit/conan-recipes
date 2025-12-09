@@ -6,6 +6,7 @@ import subprocess
 class vulkan_headers(ConanFile):
     name = "vulkan-headers"
     version = "main"
+    settings = "os", "arch", "compiler", "build_type"
     requires = (
     )
 

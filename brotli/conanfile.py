@@ -6,6 +6,7 @@ import subprocess
 class brotli(ConanFile):
     name = "brotli"
     version = "master"
+    settings = "os", "arch", "compiler", "build_type"
     requires = ()
 
     def source(self):

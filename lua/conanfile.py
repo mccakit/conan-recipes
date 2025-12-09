@@ -6,6 +6,7 @@ import subprocess
 class lua(ConanFile):
     name = "lua"
     version = "5.5.0-rc2"
+    settings = "os", "arch", "compiler", "build_type"
     extract = "lua-5.5.0"
     requires = ()
     def source(self):

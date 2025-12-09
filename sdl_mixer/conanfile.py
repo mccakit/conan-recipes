@@ -6,14 +6,21 @@ import subprocess
 class sdl_mixer(ConanFile):
     name = "sdl_mixer"
     version = "main"
-    requires = (
-        "sdl/[>=3.2.28]",
-        "opus/[>=1.5.2]",
-        "flac/[>=1.5]",
-        "mpg123/[>=1.3]",
-        "vorbis/[>=1.3.7]",
-        "ogg/[>=1.3.6]",
-    )
+    settings = "os", "arch", "compiler", "build_type"
+    def requirements(self):
+        if self.settings.os == "Linux":
+            self.requires("sdl/[>=3.2.28]")
+            self.requires("opus/[>=1.5.2]")
+            self.requires("flac/[>=1.5]")
+            self.requires("mpg123/[>=1.3]")
+            self.requires("vorbis/[>=1.3.7]")
+            self.requires("ogg/[>=1.3.6]")
+        elif self.settings.os == "Android":
+            self.requires("sdl/[>=3.2.28]")
+            self.requires("opus/[>=1.5.2]")
+            self.requires("opusfile/[>=0.12]")
+            self.requires("vorbis/[>=1.3.7]")
+            self.requires("ogg/[>=1.3.6]")
 
     def source(self):
         subprocess.run(
@@ -33,16 +40,24 @@ class sdl_mixer(ConanFile):
                     pkgconf_paths.append(path)
 
         pkgconf_path = ":".join(pkgconf_paths)
-        pkgconf_path = ":".join(["/usr/lib/x86_64-linux-gnu/pkgconfig"] + pkgconf_paths)
+        if self.settings.os == "Linux":
+            pkgconf_path = ":".join(["/usr/lib/x86_64-linux-gnu/pkgconfig"] + pkgconf_paths)
         os.environ["PKG_CONFIG_LIBDIR"] = pkgconf_path
         cmake_prefix_path = ";".join(
             dep.package_folder for dep in self.dependencies.values()
         )
-        subprocess.run(
-            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DSDLMIXER_GME=OFF -DSDLMIXER_MOD_XMP=OFF -DSDLMIXER_FLAC_LIBFLAC_SHARED=OFF -DSDLMIXER_MP3_MPG123_SHARED=OFF -DSDLMIXER_OPUS_SHARED=OFF -DSDLMIXER_OGG_SHARED=OFF -DSDLMIXER_VORBIS_SHARED=OFF -DSDLMIXER_VORBIS_VORBISFILE_SHARED=OFF"',
-            shell=True,
-            check=True,
-        )
+        if self.settings.os == "Linux":
+            subprocess.run(
+                f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DSDLMIXER_GME=OFF -DSDLMIXER_MOD_XMP=OFF -DSDLMIXER_FLAC_LIBFLAC_SHARED=OFF -DSDLMIXER_MP3_MPG123_SHARED=OFF -DSDLMIXER_OPUS_SHARED=OFF -DSDLMIXER_OGG_SHARED=OFF -DSDLMIXER_VORBIS_SHARED=OFF -DSDLMIXER_VORBIS_VORBISFILE_SHARED=OFF"',
+                shell=True,
+                check=True,
+            )
+        elif self.settings.os == "Android":
+            subprocess.run(
+                f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DSDLMIXER_GME=OFF -DSDLMIXER_MOD_XMP=OFF -DSDLMIXER_OPUS_SHARED=OFF -DSDLMIXER_OGG_SHARED=OFF -DSDLMIXER_VORBIS_SHARED=OFF -DSDLMIXER_VORBIS_VORBISFILE_SHARED=OFF"',
+                shell=True,
+                check=True,
+            )
         subprocess.run(
             f'bash -c "cmake --build build --parallel"', shell=True, check=True
         )

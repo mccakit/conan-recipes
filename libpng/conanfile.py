@@ -6,6 +6,7 @@ import subprocess
 class libpng(ConanFile):
     name = "libpng"
     version = "develop"
+    settings = "os", "arch", "compiler", "build_type"
     requires = ("zlib-ng/[>2.0.0]",)
     def source(self):
         subprocess.run(

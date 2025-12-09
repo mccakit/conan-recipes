@@ -5,6 +5,7 @@ import subprocess
 class libmp3lame(ConanFile):
     name = "libmp3lame"
     version = "main"
+    settings = "os", "arch", "compiler", "build_type"
     def source(self):
         subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 https://gitlab.com/ClarkH/libmp3lame.git -b {self.version}"', shell=True, check=True)
     def build(self):

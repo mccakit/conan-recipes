@@ -6,9 +6,10 @@ import subprocess
 class libwebp(ConanFile):
     name = "libwebp"
     version = "main"
+    settings = "os", "arch", "compiler", "build_type"
     requires = (
         "zlib-ng/[>2.0.0]",
-        "libjpeg-turbo/[>3.1.2]",
+        "libjpeg_turbo/[>3.1.2]",
         "libpng/[>1.7.0]",
     )
 

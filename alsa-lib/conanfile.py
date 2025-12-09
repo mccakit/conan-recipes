@@ -5,6 +5,7 @@ import subprocess
 class alsa_lib(ConanFile):
     name = "alsa-lib"
     version = "master"
+    settings = "os", "arch", "compiler", "build_type"
     def source(self):
         subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:alsa-project/alsa-lib.git -b {self.version}"', shell=True, check=True)
     def build(self):

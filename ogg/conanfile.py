@@ -6,6 +6,7 @@ import subprocess
 class ogg(ConanFile):
     name = "ogg"
     version = "main"
+    settings = "os", "arch", "compiler", "build_type"
     requires = ()
 
     def source(self):

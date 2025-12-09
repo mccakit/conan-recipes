@@ -6,6 +6,7 @@ from packaging.version import Version, InvalidVersion
 class pcre2(ConanFile):
     name = "pcre2"
     version = "main"
+    settings = "os", "arch", "compiler", "build_type"
     def source(self):
         subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:PCRE2Project/pcre2.git -b {self.version}"', shell=True, check=True)
     def build(self):

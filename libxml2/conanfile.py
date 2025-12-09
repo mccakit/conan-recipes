@@ -5,6 +5,7 @@ import subprocess
 class libxml2(ConanFile):
     name = "libxml2"
     version = "master"
+    settings = "os", "arch", "compiler", "build_type"
     requires = "icu/[>78]"
 
     def source(self):

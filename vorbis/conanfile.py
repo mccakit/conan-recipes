@@ -6,6 +6,7 @@ import subprocess
 class vorbis(ConanFile):
     name = "vorbis"
     version = "main"
+    settings = "os", "arch", "compiler", "build_type"
     requires = (
         "ogg/[>=1.3.6]",
     )

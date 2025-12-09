@@ -6,14 +6,21 @@ import subprocess
 class sdl_image(ConanFile):
     name = "sdl_image"
     version = "main"
-    requires = (
-        "sdl/[>=3.2.28]",
-        "libpng/[>=1.7]",
-        "libwebp/[>=1.6]",
-        "libjpeg-turbo/[>=3.1.2]",
-        "libiconv/[>1.18]",
-        "zlib-ng/[>2.0.0]",
-    )
+    settings = "os", "arch", "compiler", "build_type"
+    def requirements(self):
+        if self.settings.os == "Linux":
+            self.requires("sdl/[>=3.2.28]")
+            self.requires("libpng/[>=1.7]")
+            self.requires("libwebp/[>=1.6]")
+            self.requires("libjpeg_turbo/[>=3.1.2]")
+            self.requires("libiconv/[>1.18]")
+            self.requires("zlib-ng/[>2.0.0]")
+        elif self.settings.os == "Android":
+            self.requires("sdl/[>=3.2.28]")
+            self.requires("libpng/[>=1.7]")
+            self.requires("libwebp/[>=1.6]")
+            self.requires("libjpeg_turbo/[>=3.1.2]")
+            self.requires("zlib-ng/[>2.0.0]")
 
     def source(self):
         subprocess.run(
@@ -33,17 +40,19 @@ class sdl_image(ConanFile):
                     pkgconf_paths.append(path)
 
         pkgconf_path = ":".join(pkgconf_paths)
-        pkgconf_path = ":".join(["/usr/lib/x86_64-linux-gnu/pkgconfig"] + pkgconf_paths)
+        if self.settings.os == "Linux":
+            pkgconf_path = ":".join(["/usr/lib/x86_64-linux-gnu/pkgconfig"] + pkgconf_paths)
         os.environ["PKG_CONFIG_LIBDIR"] = pkgconf_path
         cmake_prefix_path = ";".join(
             dep.package_folder for dep in self.dependencies.values()
         )
-        os.environ["LIBRARY_PATH"] = ":".join([
-            os.path.join(self.dependencies['libiconv'].package_folder, 'lib')
-        ])
-        os.environ["CPATH"] = os.pathsep.join([
-            os.path.join(self.dependencies['libiconv'].package_folder, 'include'),
-        ])
+        if self.settings.os == "Linux":
+            os.environ["LIBRARY_PATH"] = ":".join([
+                os.path.join(self.dependencies['libiconv'].package_folder, 'lib')
+            ])
+            os.environ["CPATH"] = os.pathsep.join([
+                os.path.join(self.dependencies['libiconv'].package_folder, 'include'),
+            ])
         subprocess.run(
             f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DSDLIMAGE_SAMPLES=OFF -DSDLIMAGE_AVIF=OFF -DSDLIMAGE_BMP=OFF -DSDLIMAGE_JPG_SHARED=OFF -DSDLIMAGE_PNG_SHARED=OFF -DSDLIMAGE_WEBP_SHARED=OFF -DSDLIMAGE_TIF=OFF -DSDLIMAGE_ZLIB_SHARED=OFF"',
             shell=True,

@@ -6,6 +6,7 @@ import subprocess
 class harfbuzz(ConanFile):
     name = "harfbuzz"
     version = "main"
+    settings = "os", "arch", "compiler", "build_type"
     requires = (
         "freetype/[>=2.14]",
         "icu/[>=78]",

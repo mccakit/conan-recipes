@@ -6,6 +6,7 @@ import shutil
 class wayland(ConanFile):
     name = "wayland"
     version = "main"
+    settings = "os", "arch", "compiler", "build_type"
     requires = ("libffi/[>3.5.2]", "libxml2/[>2.15]")
 
     def source(self):

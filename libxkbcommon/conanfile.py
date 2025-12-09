@@ -5,6 +5,7 @@ import subprocess
 class libxkbcommon(ConanFile):
     name = "libxkbcommon"
     version = "master"
+    settings = "os", "arch", "compiler", "build_type"
     requires = (
         "wayland/[>=1.24]",
         "wayland-protocols/[>=1.4]",
