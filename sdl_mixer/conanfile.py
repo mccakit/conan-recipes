@@ -11,6 +11,7 @@ class sdl_mixer(ConanFile):
         if self.settings.os == "Linux":
             self.requires("sdl/[>=3.2.28]")
             self.requires("opus/[>=1.5.2]")
+            self.requires("opusfile/[>=0.12]")
             self.requires("flac/[>=1.5]")
             self.requires("mpg123/[>=1.3]")
             self.requires("vorbis/[>=1.3.7]")
@@ -19,6 +20,7 @@ class sdl_mixer(ConanFile):
             self.requires("sdl/[>=3.2.28]")
             self.requires("opus/[>=1.5.2]")
             self.requires("opusfile/[>=0.12]")
+            self.requires("mpg123/master-with-github-ci")
             self.requires("vorbis/[>=1.3.7]")
             self.requires("ogg/[>=1.3.6]")
 
@@ -54,7 +56,7 @@ class sdl_mixer(ConanFile):
             )
         elif self.settings.os == "Android":
             subprocess.run(
-                f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DSDLMIXER_GME=OFF -DSDLMIXER_MOD_XMP=OFF -DSDLMIXER_OPUS_SHARED=OFF -DSDLMIXER_OGG_SHARED=OFF -DSDLMIXER_VORBIS_SHARED=OFF -DSDLMIXER_VORBIS_VORBISFILE_SHARED=OFF"',
+                f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DSDLMIXER_VENDORED=OFF -DSDLMIXER_GME=OFF -DSDLMIXER_MOD_XMP=OFF -DSDLMIXER_MP3_MPG123_SHARED=OFF -DSDLMIXER_OPUS_SHARED=OFF -DSDLMIXER_OGG_SHARED=OFF -DSDLMIXER_VORBIS_SHARED=OFF -DSDLMIXER_VORBIS_VORBISFILE_SHARED=OFF"',
                 shell=True,
                 check=True,
             )

@@ -4,7 +4,7 @@ import subprocess
 
 class mpg123(ConanFile):
     name = "mpg123"
-    version = "main"
+    version = "master-with-github-ci"
     settings = "os", "arch", "compiler", "build_type"
     def requirements(self):
         if self.settings.os == "Linux":
@@ -12,7 +12,7 @@ class mpg123(ConanFile):
         elif self.settings.os == "Android":
             pass
     def source(self):
-        subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:libsdl-org/mpg123.git -b {self.version}"', shell=True, check=True)
+        subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:madebr/mpg123.git -b {self.version}"', shell=True, check=True)
     def build(self):
         cmake_toolchain = self.conf.get("user.mccakit:cmake", None)
         autotools_native = self.conf.get("user.mccakit:autotools_native", None)
@@ -38,6 +38,8 @@ class mpg123(ConanFile):
         cmake_prefix_path = ";".join(
             dep.package_folder for dep in self.dependencies.values()
         )
+        subprocess.run(f'bash -c "autoreconf -i"', shell=True, check=True)
+
         subprocess.run(f'bash -c "source {autotools_cross} && ./configure --host={autotools_target} --prefix {self.package_folder} {type} && make -j{cpu_count} && make install"', shell=True, check=True)
 
     def package_info(self):
