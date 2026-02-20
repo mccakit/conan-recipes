@@ -5,11 +5,11 @@ import subprocess
 
 class cpr(ConanFile):
     name = "cpr"
-    version = "master"
+    version = "1.14.1"
     settings = "os", "arch", "compiler", "build_type"
     def requirements(self):
         if self.settings.os == "Linux":
-            self.requires("curl/[>8.17]")
+            self.requires("curl/curl-8_18_0")
         elif self.settings.os == "Android":
             self.requires("curl/[>8.17]")
 

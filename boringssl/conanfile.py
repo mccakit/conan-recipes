@@ -5,7 +5,7 @@ import subprocess
 
 class boringssl(ConanFile):
     name = "boringssl"
-    version = "main"
+    version = "0.20260211.0"
     settings = "os", "arch", "compiler", "build_type"
     requires = ()
 

@@ -5,7 +5,7 @@ import subprocess
 
 class icu(ConanFile):
     name = "icu"
-    version = "main"
+    version = "release-78.2"
     settings = "os", "arch", "compiler", "build_type"
     requires = ()
 

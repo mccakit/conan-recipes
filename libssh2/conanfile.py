@@ -4,7 +4,7 @@ import subprocess
 
 class libssh2(ConanFile):
     name = "libssh2"
-    version = "master"
+    version = "libssh2-1.11.1"
     settings = "os", "arch", "compiler", "build_type"
     requires = (
         "boringssl/[>0.20]",

@@ -4,7 +4,7 @@ import subprocess
 
 class zlib_ng(ConanFile):
     name = "zlib-ng"
-    version= "develop"
+    version= "2.3.3"
     settings = "os", "arch", "compiler", "build_type"
 
     def source(self):

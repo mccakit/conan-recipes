@@ -5,17 +5,16 @@ import subprocess
 
 class curl(ConanFile):
     name = "curl"
-    version = "master"
+    version = "curl-8_18_0"
     settings = "os", "arch", "compiler", "build_type"
     def requirements(self):
         if self.settings.os == "Linux":
             self.requires("boringssl/[>0.20]")
-            self.requires("libidn2/[>2.8.3]")
             self.requires("zstd/[>1.5.7]")
             self.requires("zlib-ng/[>2.0.0]")
             self.requires("brotli/[>1.2.0]")
-            self.requires("libpsl/[>0.21.5]")
-            self.requires("libssh2/[>1.11.1]")
+            self.requires("libpsl/0.21.5")
+            self.requires("libssh2/libssh2-1.11.1")
         elif self.settings.os == "Android":
             self.requires("boringssl/[>0.20]")
             self.requires("zstd/[>1.5.7]")
