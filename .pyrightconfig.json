@@ -1,0 +1,15 @@
+{
+  "reportOptionalMemberAccess": false,
+  "reportArgumentType": false,
+  "reportUninitializedInstanceVariable": false,
+  "reportReturnType": false,
+  "reportMissingTypeArgument": false,
+  "reportAttributeAccessIssue": false,
+  "reportAssignmentType": false,
+  "reportOperatorIssue": false,
+  "reportPossiblyUnboundVariable": false,
+  "reportOptionalOperand": false,
+  "reportCallIssue": false,
+
+  "extraPaths": ["."]
+}
