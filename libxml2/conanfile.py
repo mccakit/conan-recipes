@@ -6,7 +6,7 @@ class libxml2(ConanFile):
     name = "libxml2"
     version = "master"
     settings = "os", "arch", "compiler", "build_type"
-    requires = "icu/[>78]"
+    requires = "icu/release-78.2"
 
     def source(self):
         subprocess.run(f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:GNOME/libxml2.git -b {self.version}"', shell=True, check=True)
@@ -26,7 +26,3 @@ class libxml2(ConanFile):
         subprocess.run(f'bash -c "meson setup builddir --native-file={meson_native} --cross-file={meson_cross} --prefix={self.package_folder} -Dicu=enabled"', shell=True, check=True)
         subprocess.run(f'bash -c "meson compile -C builddir"', shell=True, check=True)
         subprocess.run(f'bash -c "meson install -C builddir"', shell=True, check=True)
-
-    def package_info(self):
-        self.cpp_info.libs = ["xml2"]
-        self.cpp_info.includedirs = ["include/libxml2"]

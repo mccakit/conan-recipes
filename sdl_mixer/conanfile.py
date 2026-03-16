@@ -12,8 +12,7 @@ class sdl_mixer(ConanFile):
             self.requires("sdl/[>=3.2.28]")
             self.requires("opus/[>=1.5.2]")
             self.requires("opusfile/[>=0.12]")
-            self.requires("flac/[>=1.5]")
-            self.requires("mpg123/[>=1.3]")
+            self.requires("mpg123/master-with-github-ci")
             self.requires("vorbis/[>=1.3.7]")
             self.requires("ogg/[>=1.3.6]")
         elif self.settings.os == "Android":
@@ -64,6 +63,3 @@ class sdl_mixer(ConanFile):
             f'bash -c "cmake --build build --parallel"', shell=True, check=True
         )
         subprocess.run(f'bash -c "cmake --install build"', shell=True, check=True)
-
-    def package_info(self):
-        self.cpp_info.libs = ["SDL3_mixer"]

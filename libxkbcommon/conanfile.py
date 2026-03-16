@@ -7,8 +7,10 @@ class libxkbcommon(ConanFile):
     version = "master"
     settings = "os", "arch", "compiler", "build_type"
     requires = (
-        "wayland/[>=1.24]",
-        "wayland-protocols/[>=1.4]",
+        "wayland/main",
+        "wayland-protocols/main",
+        "wayland_scanner/main",
+        "libxml2/master"
     )
 
     def source(self):
@@ -23,14 +25,11 @@ class libxkbcommon(ConanFile):
         meson_cross = self.conf.get("user.mccakit:meson_cross", None)
 
         os.chdir("libxkbcommon")
-        pkgconf_paths = []
-        for dep in self.dependencies.values():
-            for subdir in ("lib", "share"):
-                path = os.path.join(dep.package_folder, subdir, "pkgconfig")
-                if os.path.isdir(path):
-                    pkgconf_paths.append(path)
-
-        pkgconf_path = ":".join(pkgconf_paths)
+        pkgconf_path = ":".join(
+            os.path.join(dep.package_folder, subdir)
+            for dep in self.dependencies.values()
+            for subdir in ["lib/pkgconfig", "lib/x86_64-linux-gnu/pkgconfig", "share/pkgconfig"]
+        )
         os.environ["PKG_CONFIG_LIBDIR"] = pkgconf_path
         subprocess.run(
             f'bash -c "meson setup builddir --native-file={meson_native} --cross-file={meson_cross} --prefix={self.package_folder} -Denable-x11=false -Dxkb-config-root=/usr/share/X11/xkb -Dx-locale-root=/usr/share/X11/locale"',

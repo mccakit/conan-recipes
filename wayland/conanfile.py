@@ -7,7 +7,7 @@ class wayland(ConanFile):
     name = "wayland"
     version = "main"
     settings = "os", "arch", "compiler", "build_type"
-    requires = ("libffi/[>3.5.2]", "libxml2/[>2.15]")
+    requires = ("libexpat/master", "wayland_scanner/main", "libffi/master")
 
     def source(self):
         subprocess.run(
@@ -23,38 +23,18 @@ class wayland(ConanFile):
 
         os.chdir("wayland")
         pkgconf_path = ":".join(
-            os.path.join(dep.package_folder, "lib", "pkgconfig")
+            os.path.join(dep.package_folder, subdir)
             for dep in self.dependencies.values()
+            for subdir in ["lib/pkgconfig", "lib/x86_64-linux-gnu/pkgconfig"]
         )
-        pkgconf_path += ":" + os.path.join(str(utilities), "lib", "pkgconfig")
         os.environ["PKG_CONFIG_LIBDIR"] = pkgconf_path
         cmake_prefix_path = ";".join(
             dep.package_folder for dep in self.dependencies.values()
         )
-        os.mkdir("scanner")
         subprocess.run(
-            f'bash -c "meson setup builddir --native-file={meson_native} --cross-file={meson_cross} --prefix={os.path.abspath("scanner")} -Dlibraries=false -Dtests=false -Ddocumentation=false -Ddtd_validation=false"',
+            f'bash -c "meson setup builddir --native-file={meson_native} --cross-file={meson_cross} --prefix={self.package_folder} -Dscanner=false -Dtests=false -Dtests=false -Ddocumentation=false"',
             shell=True,
             check=True,
         )
         subprocess.run(f'bash -c "meson compile -C builddir"', shell=True, check=True)
         subprocess.run(f'bash -c "meson install -C builddir"', shell=True, check=True)
-        shutil.rmtree("builddir")
-
-        paths = pkgconf_path.split(":")
-        paths = paths[:-1]
-        pkgconf_path = ":".join(paths)
-        pkgconf_path += ":" + os.path.join(os.path.abspath("scanner"), "lib", "pkgconfig")
-        os.environ["PKG_CONFIG_LIBDIR"] = pkgconf_path
-        print(os.environ["PKG_CONFIG_LIBDIR"])
-        subprocess.run(
-            f'bash -c "meson setup builddir --native-file={meson_native} --cross-file={meson_cross} --prefix={self.package_folder}"',
-            shell=True,
-            check=True,
-        )
-        subprocess.run(f'bash -c "meson compile -C builddir"', shell=True, check=True)
-        subprocess.run(f'bash -c "meson install -C builddir"', shell=True, check=True)
-
-
-    def package_info(self):
-        self.cpp_info.libs = ["wayland-client", "wayland-cursor", "wayland-egl", "wayland-server"]

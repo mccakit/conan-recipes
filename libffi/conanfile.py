@@ -35,6 +35,3 @@ class libffi(ConanFile):
         )
         subprocess.run(f'bash -c "./autogen.sh"', shell=True, check=True)
         subprocess.run(f'bash -c "source {autotools_cross} && ./configure --host={autotools_target} --prefix {self.package_folder} {type} && make -j{cpu_count} && make install"', shell=True, check=True)
-
-    def package_info(self):
-        self.cpp_info.libs = ["ffi"]

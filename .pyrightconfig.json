@@ -10,6 +10,7 @@
   "reportPossiblyUnboundVariable": false,
   "reportOptionalOperand": false,
   "reportCallIssue": false,
+  "reportOptionalCall": false,
 
   "extraPaths": ["."]
 }

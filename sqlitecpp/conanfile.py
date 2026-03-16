@@ -8,7 +8,7 @@ class sqlitecpp(ConanFile):
     version = "master"
     settings = "os", "arch", "compiler", "build_type"
     requires = (
-        "sqlite3/[>=3.51]",
+        "sqlite/[>=3.51]",
     )
 
     def source(self):
@@ -30,7 +30,7 @@ class sqlitecpp(ConanFile):
             dep.package_folder for dep in self.dependencies.values()
         )
         subprocess.run(
-            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DSQLITECPP_INTERNAL_SQLITE=OFF"',
+            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DSQLITECPP_INTERNAL_SQLITE=OFF -DSQLITE_ENABLE_COLUMN_METADATA=OFF"',
             shell=True,
             check=True,
         )
@@ -38,6 +38,3 @@ class sqlitecpp(ConanFile):
             f'bash -c "cmake --build build --parallel"', shell=True, check=True
         )
         subprocess.run(f'bash -c "cmake --install build"', shell=True, check=True)
-
-    def package_info(self):
-        self.cpp_info.libs = ["SQLiteCpp"]
