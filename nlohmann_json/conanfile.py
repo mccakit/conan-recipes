@@ -11,14 +11,14 @@ class nlohmann_json(ConanFile):
 
     def source(self):
         subprocess.run(
-            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:nlohmann/json.git -b {self.version}"',
+            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:mccakit/nlohmann_json.git -b {self.version}"',
             shell=True,
             check=True,
         )
 
     def build(self):
         cmake_toolchain = self.conf.get("user.mccakit:cmake", None)
-        os.chdir("json")
+        os.chdir("nlohmann_json")
         pkgconf_path = ":".join(
             os.path.join(dep.package_folder, "lib", "pkgconfig")
             for dep in self.dependencies.values()
@@ -28,7 +28,7 @@ class nlohmann_json(ConanFile):
             dep.package_folder for dep in self.dependencies.values()
         )
         subprocess.run(
-            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DJSON_BuildTests=OFF"',
+            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DJSON_BuildTests=OFF -DNLOHMANN_JSON_BUILD_MODULES=ON"',
             shell=True,
             check=True,
         )
