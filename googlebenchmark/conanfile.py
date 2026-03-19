@@ -3,23 +3,23 @@ import os
 import subprocess
 
 
-class fmt(ConanFile):
-    name = "fmt"
-    version = "master"
+class googlebenchmark(ConanFile):
+    name = "googlebenchmark"
+    version = "v1.9.5"
     settings = "os", "arch", "compiler", "build_type"
     def requirements(self):
-        pass
+        self.requires("googletest/v1.17.0")
 
     def source(self):
         subprocess.run(
-            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:mccakit/fmt.git -b {self.version}"',
+            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:google/benchmark.git -b {self.version}"',
             shell=True,
             check=True,
         )
 
     def build(self):
         cmake_toolchain = self.conf.get("user.mccakit:cmake", None)
-        os.chdir("fmt")
+        os.chdir("benchmark")
         pkgconf_path = ":".join(
             os.path.join(dep.package_folder, "lib", "pkgconfig")
             for dep in self.dependencies.values()
@@ -29,7 +29,7 @@ class fmt(ConanFile):
             dep.package_folder for dep in self.dependencies.values()
         )
         subprocess.run(
-            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DFMT_TEST=OFF -DFMT_DOC=OFF -DFMT_MODULE=ON"',
+            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DBENCHMARK_ENABLE_TESTING=OFF"',
             shell=True,
             check=True,
         )
