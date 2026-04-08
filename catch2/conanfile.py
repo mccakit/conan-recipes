@@ -3,21 +3,21 @@ import os
 import subprocess
 
 
-class cli11(ConanFile):
-    name = "cli11"
-    version = "main"
+class catch2(ConanFile):
+    name = "catch2"
+    version = "devel"
     settings = "os", "arch", "compiler", "build_type"
 
     def source(self):
         subprocess.run(
-            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:mccakit/cli.git -b {self.version}"',
+            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:catchorg/Catch2.git -b {self.version}"',
             shell=True,
             check=True,
         )
 
     def build(self):
         cmake_toolchain = self.conf.get("user.mccakit:cmake", None)
-        os.chdir("cli")
+        os.chdir("Catch2")
         pkgconf_path = ":".join(
             os.path.join(dep.package_folder, "lib", "pkgconfig")
             for dep in self.dependencies.values()
@@ -27,7 +27,7 @@ class cli11(ConanFile):
             dep.package_folder for dep in self.dependencies.values()
         )
         subprocess.run(
-            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF"',
+            f'bash -c "cmake -B build -G Ninja -DCMAKE_PREFIX_PATH=\\"{cmake_prefix_path}\\" -DCMAKE_TOOLCHAIN_FILE={cmake_toolchain} -DCMAKE_INSTALL_PREFIX={self.package_folder} -DCATCH_INSTALL_DOCS=OFF -DCATCH_INSTALL_EXTRAS=OFF -DCATCH_ENABLE_REPRODUCIBLE_BUILD=OFF"',
             shell=True,
             check=True,
         )

@@ -6,13 +6,13 @@ import shutil, glob
 
 class vectorscan(ConanFile):
     name = "vectorscan"
-    version = "libcxx_fix"
+    version = "develop"
     settings = "os", "arch", "compiler", "build_type"
     def requirements(self):
         self.requires("boost/master")
     def source(self):
         subprocess.run(
-            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:mccakit/vectorscan.git -b {self.version}"',
+            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:VectorCamp/vectorscan.git -b {self.version}"',
             shell=True,
             check=True,
         )
