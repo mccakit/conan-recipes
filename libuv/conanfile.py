@@ -10,7 +10,7 @@ class libuv(ConanFile):
 
     def source(self):
         subprocess.run(
-            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:libuv/libuv.git -b {self.version}"',
+            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:mccakit/libuv.git -b {self.version}"',
             shell=True,
             check=True,
         )
