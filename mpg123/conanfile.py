@@ -41,6 +41,3 @@ class mpg123(ConanFile):
         subprocess.run(f'bash -c "autoreconf -i"', shell=True, check=True)
 
         subprocess.run(f'bash -c "source {autotools_cross} && ./configure --host={autotools_target} --prefix {self.package_folder} {type} && make -j{cpu_count} && make install"', shell=True, check=True)
-
-    def package_info(self):
-        self.cpp_info.libs = ["mpg123", "out123", "syn123"]

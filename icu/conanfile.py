@@ -26,6 +26,7 @@ class icu(ConanFile):
         build = self.conf.get("user.mccakit:build", None)
         static = "--enable-static --disable-shared"
         shared = "--enable-shared --disable-static"
+
         if build == "static":
             type = static
         elif build == "shared":
@@ -37,16 +38,18 @@ class icu(ConanFile):
         os.mkdir("native")
         abs_native = os.path.abspath("native")
         os.chdir("native")
+
         pkgconf_path = ":".join(
             os.path.join(dep.package_folder, "lib", "pkgconfig")
             for dep in self.dependencies.values()
         )
         os.environ["PKG_CONFIG_LIBDIR"] = pkgconf_path
+
         cmake_prefix_path = ";".join(
             dep.package_folder for dep in self.dependencies.values()
         )
         subprocess.run(
-            f'bash -c "source {autotools_native} && ../configure {static} && make -j{cpu_count}"',
+            f'bash -c "source {autotools_native} && ../configure {static} --disable-tests --disable-samples --disable-extras && make -j{cpu_count}"',
             shell=True,
             check=True,
         )
@@ -54,6 +57,7 @@ class icu(ConanFile):
         os.chdir("..")
         os.mkdir("cross")
         os.chdir("cross")
+
         subprocess.run(
             f'bash -c "source {autotools_cross} && ../configure --host={autotools_target} {type} --prefix={self.package_folder} --with-cross-build={abs_native} --disable-tools --disable-tests --disable-samples --disable-extras && make -j{cpu_count} && make install"',
             shell=True,

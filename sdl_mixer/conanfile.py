@@ -5,7 +5,7 @@ import subprocess
 
 class sdl_mixer(ConanFile):
     name = "sdl_mixer"
-    version = "main"
+    version = "release-3.2.0"
     settings = "os", "arch", "compiler", "build_type"
     def requirements(self):
         if self.settings.os == "Linux":

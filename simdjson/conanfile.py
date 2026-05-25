@@ -12,7 +12,7 @@ class simdjson(ConanFile):
 
     def source(self):
         subprocess.run(
-            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 git@github.com:simdjson/simdjson.git -b {self.version}"',
+            f'bash -c "git clone --recurse-submodules --shallow-submodules --depth 1 https://github.com/simdjson/simdjson.git -b {self.version}"',
             shell=True,
             check=True,
         )
